@@ -30,6 +30,7 @@
   </script>
   <style>
     @media print {
+      @page { margin: 1cm; }
       .no-print { display: none !important; }
       body { background: #ffffff !important; }
       .print-card { break-inside: avoid; page-break-inside: avoid; }
@@ -70,7 +71,7 @@
     </form>
   </div>
 
-  <main class="max-w-5xl mx-auto p-4 sm:p-6">
+  <main class="max-w-5xl mx-auto p-4 sm:p-6 print:max-w-none print:p-0">
     @if(!auth()->user()?->isAdmin())
       <div class="no-print mb-4 p-3 rounded-lg bg-amber-50 border border-amber-200 text-amber-800 text-xs">
         <strong>Catatan Role Panitia:</strong> Token pemilih disembunyikan pada pratinjau Panitia. Hanya Administrator yang dapat mencetak kartu dengan token terlihat.
@@ -106,18 +107,18 @@
                 <span class="font-bold text-sm text-black block truncate">{{ $v->nama }}</span>
               </div>
               <div class="flex items-center justify-between gap-2">
-                <div class="flex items-center gap-3 min-w-0">
-                  <div>
+                <div class="flex items-center gap-2.5 min-w-0">
+                  <div class="shrink-0">
                     <span class="text-[10px] text-black block">NIS</span>
-                    <span class="font-mono font-medium text-black">{{ $v->nis }}</span>
+                    <span class="font-mono font-medium text-black whitespace-nowrap">{{ $v->nis }}</span>
                   </div>
-                  <div>
+                  <div class="min-w-0">
                     <span class="text-[10px] text-black block">Kelas</span>
-                    <span class="font-medium text-black">{{ $v->kelas }}</span>
+                    <span class="font-medium text-black whitespace-nowrap">{{ $v->kelas }}</span>
                   </div>
                 </div>
 
-                <div class="border border-dashed border-black rounded-lg min-w-[116px] px-4 py-1.5 bg-white flex flex-col items-center justify-center text-center shrink-0">
+                <div class="border border-dashed border-black rounded-lg px-2.5 py-1.5 bg-white flex flex-col items-center justify-center text-center shrink-0">
                   <span class="text-[10px] text-black leading-tight mb-1.5">Token</span>
                   @if($v->has_voted)
                     <span class="font-mono text-xs font-bold line-through text-black">{{ $v->token }}</span>
