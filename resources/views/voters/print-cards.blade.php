@@ -79,10 +79,10 @@
 
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
       @foreach($voters as $v)
-        <div class="print-card bg-white border border-notion-border rounded-xl p-4 flex flex-col justify-between gap-3">
-          <div class="flex items-center justify-between border-b border-notion-border pb-2.5 gap-2">
+        <div class="print-card bg-white text-black border border-black rounded-xl p-4 flex flex-col justify-between gap-3">
+          <div class="flex items-center justify-between border-b border-black pb-2.5 gap-2">
             <div class="flex items-center gap-2.5 min-w-0">
-              <div class="w-9 h-9 flex items-center justify-center shrink-0 {{ $setting->logo_path ? '' : 'rounded bg-notion-text text-white' }}">
+              <div class="w-9 h-9 flex items-center justify-center shrink-0 {{ $setting->logo_path ? '' : 'rounded bg-black text-white' }}">
                 @if($setting->logo_path)
                   <img src="{{ asset('uploads/' . $setting->logo_path) }}" alt="Logo" class="w-full h-full object-contain">
                 @else
@@ -90,54 +90,54 @@
                 @endif
               </div>
               <div class="min-w-0">
-                <p class="text-[11px] font-bold uppercase tracking-wider text-notion-text truncate">Kartu Pemilih OSIS</p>
-                <p class="text-[10px] text-notion-gray truncate">{{ $setting->nama_sekolah }} · {{ $setting->tahun_ajaran }}</p>
+                <p class="text-[11px] font-bold uppercase tracking-wider text-black truncate">Kartu Pemilih OSIS</p>
+                <p class="text-[10px] text-black truncate">{{ $setting->nama_sekolah }} · {{ $setting->tahun_ajaran }}</p>
               </div>
             </div>
-            <span class="px-2 py-0.5 rounded text-[11px] font-mono font-semibold bg-notion-sidebar border border-notion-border shrink-0">
+            <span class="px-2 py-0.5 rounded text-[11px] font-mono font-semibold bg-white text-black border border-black shrink-0">
               {{ $v->tps?->kode_tps ?? 'TPS' }}
             </span>
           </div>
 
-          <div class="flex items-center gap-3 text-xs">
+          <div class="flex items-center gap-3 text-xs text-black">
             <div class="flex-1 min-w-0 space-y-2">
               <div class="min-w-0">
-                <span class="text-[10px] text-notion-gray block">Nama Pemilih</span>
-                <span class="font-bold text-sm text-notion-text block truncate">{{ $v->nama }}</span>
+                <span class="text-[10px] text-black block">Nama Pemilih</span>
+                <span class="font-bold text-sm text-black block truncate">{{ $v->nama }}</span>
               </div>
               <div class="flex items-center justify-between gap-2">
                 <div class="flex items-center gap-3 min-w-0">
                   <div>
-                    <span class="text-[10px] text-notion-gray block">NIS</span>
-                    <span class="font-mono font-medium">{{ $v->nis }}</span>
+                    <span class="text-[10px] text-black block">NIS</span>
+                    <span class="font-mono font-medium text-black">{{ $v->nis }}</span>
                   </div>
                   <div>
-                    <span class="text-[10px] text-notion-gray block">Kelas</span>
-                    <span class="font-medium">{{ $v->kelas }}</span>
+                    <span class="text-[10px] text-black block">Kelas</span>
+                    <span class="font-medium text-black">{{ $v->kelas }}</span>
                   </div>
                 </div>
 
-                <div class="border border-dashed border-notion-border rounded-lg min-w-[116px] px-4 py-1.5 bg-notion-sidebar/60 flex flex-col items-center justify-center text-center shrink-0">
-                  <span class="text-[10px] text-notion-gray leading-tight mb-1.5">Token</span>
+                <div class="border border-dashed border-black rounded-lg min-w-[116px] px-4 py-1.5 bg-white flex flex-col items-center justify-center text-center shrink-0">
+                  <span class="text-[10px] text-black leading-tight mb-1.5">Token</span>
                   @if($v->has_voted)
-                    <span class="font-mono text-xs font-bold line-through text-red-600">{{ $v->token }}</span>
+                    <span class="font-mono text-xs font-bold line-through text-black">{{ $v->token }}</span>
                   @elseif(auth()->user()?->isAdmin())
-                    <span class="font-mono text-sm font-bold tracking-wider text-notion-blue">{{ $v->token }}</span>
+                    <span class="font-mono text-sm font-bold tracking-wider text-black">{{ $v->token }}</span>
                   @else
-                    <span class="font-mono text-xs font-bold tracking-widest text-notion-gray">••••••</span>
+                    <span class="font-mono text-xs font-bold tracking-widest text-black">••••••</span>
                   @endif
                 </div>
               </div>
             </div>
 
             <div class="shrink-0 flex flex-col items-center justify-center text-center">
-              <div class="qr-box p-1 bg-white border border-notion-border rounded-lg"
+              <div class="qr-box p-1 bg-white border border-black rounded-lg"
                    data-url="{{ route('voting.index') }}"></div>
-              <span class="text-[9px] text-notion-gray mt-0.5">Scan Bilik</span>
+              <span class="text-[9px] text-black mt-0.5">Scan Bilik</span>
             </div>
           </div>
 
-          <div class="pt-2 border-t border-notion-border flex items-center justify-center sm:justify-end text-[10px] text-notion-gray">
+          <div class="pt-2 border-t border-black flex items-center justify-center sm:justify-end text-[10px] text-black">
             <span>Pastikan token masih tersegel sebelum digunakan</span>
           </div>
         </div>
@@ -245,7 +245,7 @@
         text: url,
         width: size,
         height: size,
-        colorDark: '#222222',
+        colorDark: '#000000',
         colorLight: '#ffffff',
         correctLevel: QRCode.CorrectLevel.M
       });
@@ -266,8 +266,8 @@
 
       const finders = [[0, 0], [0, n - 7], [n - 7, 0]];
       finders.forEach(([fr, fc]) => {
-        parts.push(`<rect x="${fc + 0.5}" y="${fr + 0.5}" width="6" height="6" rx="1.5" fill="none" stroke="#222222" stroke-width="1"/>`);
-        parts.push(`<rect x="${fc + 2}" y="${fr + 2}" width="3" height="3" rx="0.9" fill="#222222"/>`);
+        parts.push(`<rect x="${fc + 0.5}" y="${fr + 0.5}" width="6" height="6" rx="1.5" fill="none" stroke="#000000" stroke-width="1"/>`);
+        parts.push(`<rect x="${fc + 2}" y="${fr + 2}" width="3" height="3" rx="0.9" fill="#000000"/>`);
       });
 
       for (let r = 0; r < n; r++) {
@@ -279,7 +279,7 @@
               c++;
             }
             const len = c - start;
-            parts.push(`<rect x="${start + 0.07}" y="${r + 0.07}" width="${len - 0.14}" height="0.86" rx="0.43" fill="#222222"/>`);
+            parts.push(`<rect x="${start + 0.07}" y="${r + 0.07}" width="${len - 0.14}" height="0.86" rx="0.43" fill="#000000"/>`);
           } else {
             c++;
           }
