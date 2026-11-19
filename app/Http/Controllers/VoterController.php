@@ -9,7 +9,6 @@ use App\Services\XlsxService;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Str;
 
 class VoterController extends Controller
 {
@@ -78,7 +77,7 @@ class VoterController extends Controller
             'status' => 'required|in:terverifikasi,belum_aktivasi',
         ]);
 
-        $validated['token'] = strtoupper(Str::random(6));
+        $validated['token'] = $this->generateLetterToken();
         Voter::create($validated);
 
         return redirect()->route('voters.index')
@@ -117,7 +116,7 @@ class VoterController extends Controller
                 ->with('error', "Token {$voter->nama} sudah hangus karena pemilih telah menggunakan hak pilihnya.");
         }
 
-        $newToken = strtoupper(Str::random(6));
+        $newToken = $this->generateLetterToken();
         $voter->update(['token' => $newToken]);
 
         $msg = Auth::user()?->isAdmin()
@@ -159,7 +158,7 @@ class VoterController extends Controller
                     'nama' => $nama,
                     'kelas' => $kelas,
                     'tps_id' => $tpsId,
-                    'token' => strtoupper(Str::random(6)),
+                    'token' => $this->generateLetterToken(),
                     'status' => 'terverifikasi',
                 ]);
                 $imported++;
@@ -219,5 +218,15 @@ class VoterController extends Controller
             ->values();
 
         return view('voters.print-dpt', compact('setting', 'tpsList', 'selectedTps', 'tpsId', 'voters'));
+    }
+
+    private function generateLetterToken(int $length = 6): string
+    {
+        $letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $token = '';
+        for ($i = 0; $i < $length; $i++) {
+            $token .= $letters[random_int(0, 25)];
+        }
+        return $token;
     }
 }
