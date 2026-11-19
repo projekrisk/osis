@@ -10,11 +10,14 @@
     $seoTitle = trim($__env->yieldContent('title', 'Pemilihan OSIS')) . ' — ' . $seoSetting->nama_sekolah;
     $seoDescription = trim($__env->yieldContent('meta_description', 'Portal resmi ' . $seoSetting->nama_kegiatan . ' ' . $seoSetting->nama_sekolah . ' Tahun Ajaran ' . $seoSetting->tahun_ajaran . '. Pelajari visi, misi, dan pantau hasil quick count secara langsung.'));
     $seoImage = $seoSetting->logo_path ? asset('uploads/' . $seoSetting->logo_path) : asset('uploads/hero.jpg');
+    $twitterCard = $seoSetting->logo_path ? 'summary' : 'summary_large_image';
   @endphp
   <meta name="description" content="{{ $seoDescription }}">
   <meta name="robots" content="@yield('meta_robots', 'index, follow')">
   <meta name="theme-color" content="#2563eb">
   <link rel="canonical" href="{{ url()->current() }}">
+  <link rel="image_src" href="{{ $seoImage }}">
+  <meta itemprop="image" content="{{ $seoImage }}">
   <meta property="og:type" content="website">
   <meta property="og:locale" content="id_ID">
   <meta property="og:site_name" content="{{ $seoSetting->nama_kegiatan }} — {{ $seoSetting->nama_sekolah }}">
@@ -22,7 +25,9 @@
   <meta property="og:description" content="{{ $seoDescription }}">
   <meta property="og:url" content="{{ url()->current() }}">
   <meta property="og:image" content="{{ $seoImage }}">
-  <meta name="twitter:card" content="summary_large_image">
+  <meta property="og:image:secure_url" content="{{ $seoImage }}">
+  <meta property="og:image:alt" content="Logo {{ $seoSetting->nama_sekolah }}">
+  <meta name="twitter:card" content="{{ $twitterCard }}">
   <meta name="twitter:title" content="{{ $seoTitle }}">
   <meta name="twitter:description" content="{{ $seoDescription }}">
   <meta name="twitter:image" content="{{ $seoImage }}">

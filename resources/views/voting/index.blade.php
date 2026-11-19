@@ -263,10 +263,10 @@
 @push('modals')
 
   @if(!$isElectionOpen && !$receipt)
-    <div id="election-closed-modal" class="hidden fixed inset-0 w-screen h-screen z-[100] flex items-end sm:items-center justify-center sm:p-4 bg-black/50 backdrop-blur-sm opacity-0 transition-opacity duration-200" onclick="closeAppModal('election-closed-modal')">
-      <div onclick="event.stopPropagation()" class="bg-white border border-notion-border rounded-t-2xl sm:rounded-2xl max-w-md w-full flex flex-col shadow-xl transform translate-y-6 sm:translate-y-0 sm:scale-95 transition-all duration-200 overflow-hidden">
+    <div id="election-closed-modal" class="hidden fixed inset-0 h-[100dvh] w-full z-[100] flex items-end sm:items-center justify-center sm:p-4 bg-black/50 backdrop-blur-sm opacity-0 transition-opacity duration-200" onclick="closeAppModal('election-closed-modal')">
+      <div onclick="event.stopPropagation()" class="bg-white border border-notion-border rounded-t-2xl sm:rounded-2xl max-w-md w-full max-h-[85dvh] sm:max-h-[90dvh] flex flex-col shadow-xl transform translate-y-6 sm:translate-y-0 sm:scale-95 transition-all duration-200 overflow-hidden">
         <div class="sm:hidden pt-2.5 pb-1 flex justify-center shrink-0 bg-white"><div class="w-10 h-1.5 bg-notion-border rounded-full"></div></div>
-        <div class="p-6 text-center space-y-4">
+        <div class="p-6 pb-[max(1.5rem,env(safe-area-inset-bottom))] overflow-y-auto flex-1 min-h-0 text-center space-y-4">
           <div class="w-14 h-14 rounded-2xl mx-auto flex items-center justify-center {{ $electionState === 'selesai' ? 'bg-notion-hover text-notion-text' : 'bg-amber-50 text-amber-700 border border-amber-200' }}">
             <i data-lucide="{{ $electionState === 'selesai' ? 'lock' : 'clock' }}" class="w-7 h-7"></i>
           </div>
@@ -292,14 +292,14 @@
   @endif
   </div>
 
-  <div id="confirm-vote-modal" class="hidden fixed inset-0 w-screen h-screen z-[100] flex items-end sm:items-center justify-center sm:p-4 bg-black/50 backdrop-blur-sm opacity-0 transition-opacity duration-200" onclick="closeAppModal('confirm-vote-modal')">
-    <div onclick="event.stopPropagation()" class="bg-white border border-notion-border rounded-t-2xl sm:rounded-2xl max-w-md w-full flex flex-col shadow-xl transform translate-y-6 sm:translate-y-0 sm:scale-95 transition-all duration-200 overflow-hidden">
+  <div id="confirm-vote-modal" class="hidden fixed inset-0 h-[100dvh] w-full z-[100] flex items-end sm:items-center justify-center sm:p-4 bg-black/50 backdrop-blur-sm opacity-0 transition-opacity duration-200" onclick="closeAppModal('confirm-vote-modal')">
+    <div onclick="event.stopPropagation()" class="bg-white border border-notion-border rounded-t-2xl sm:rounded-2xl max-w-md w-full max-h-[85dvh] sm:max-h-[90dvh] flex flex-col shadow-xl transform translate-y-6 sm:translate-y-0 sm:scale-95 transition-all duration-200 overflow-hidden">
       <div class="sm:hidden pt-2.5 pb-1 flex justify-center shrink-0 bg-white"><div class="w-10 h-1.5 bg-notion-border rounded-full"></div></div>
-      <div class="px-6 py-4 border-b border-notion-border flex items-center justify-between">
+      <div class="px-6 py-4 border-b border-notion-border flex items-center justify-between shrink-0">
         <h3 class="font-bold text-lg">Konfirmasi Pilihan</h3>
         <button type="button" onclick="closeAppModal('confirm-vote-modal')" class="p-1 text-notion-gray hover:text-notion-text rounded-md"><i data-lucide="x" class="w-4 h-4"></i></button>
       </div>
-      <form action="{{ route('voting.cast') }}" method="POST" class="p-6 space-y-4">
+      <form action="{{ route('voting.cast') }}" method="POST" class="p-6 pb-[max(1.5rem,env(safe-area-inset-bottom))] overflow-y-auto flex-1 min-h-0 space-y-4">
         @csrf
         <input type="hidden" name="candidate_id" id="vote-candidate-id">
         <p class="text-sm text-notion-gray">Anda yakin ingin mengirim suara untuk pasangan calon berikut? Pilihan tidak dapat diubah setelah dikirim.</p>
@@ -314,8 +314,8 @@
     </div>
   </div>
 
-  <div id="visi-misi-modal" class="hidden fixed inset-0 w-screen h-screen z-[100] flex items-end sm:items-center justify-center sm:p-4 bg-black/50 backdrop-blur-sm opacity-0 transition-opacity duration-200" onclick="closeAppModal('visi-misi-modal')">
-    <div onclick="event.stopPropagation()" class="bg-white border border-notion-border rounded-t-2xl sm:rounded-2xl max-w-lg w-full max-h-[90vh] flex flex-col shadow-xl transform translate-y-6 sm:translate-y-0 sm:scale-95 transition-all duration-200 overflow-hidden">
+  <div id="visi-misi-modal" class="hidden fixed inset-0 h-[100dvh] w-full z-[100] flex items-end sm:items-center justify-center sm:p-4 bg-black/50 backdrop-blur-sm opacity-0 transition-opacity duration-200" onclick="closeAppModal('visi-misi-modal')">
+    <div onclick="event.stopPropagation()" class="bg-white border border-notion-border rounded-t-2xl sm:rounded-2xl max-w-lg w-full max-h-[85dvh] sm:max-h-[90dvh] flex flex-col shadow-xl transform translate-y-6 sm:translate-y-0 sm:scale-95 transition-all duration-200 overflow-hidden">
       <div class="sm:hidden pt-2.5 pb-1 flex justify-center shrink-0 bg-white"><div class="w-10 h-1.5 bg-notion-border rounded-full"></div></div>
       <div class="sticky top-0 z-10 bg-white px-6 py-4 border-b border-notion-border flex items-center justify-between shrink-0">
         <div>
@@ -337,7 +337,7 @@
           <div id="vm-misi" class="text-sm text-notion-text leading-relaxed space-y-2 break-words whitespace-normal min-w-0 [overflow-wrap:anywhere]"></div>
         </div>
       </div>
-      <div class="sticky bottom-0 z-10 bg-white px-6 py-4 border-t border-notion-border flex items-center justify-end gap-2 shrink-0">
+      <div class="sticky bottom-0 z-10 bg-white px-6 py-4 pb-[max(1rem,env(safe-area-inset-bottom))] border-t border-notion-border flex items-center justify-end gap-2 shrink-0">
         <button type="button" onclick="closeAppModal('visi-misi-modal')" class="px-4 py-2 bg-notion-text text-white text-sm font-medium rounded-lg hover:bg-black">Tutup</button>
       </div>
     </div>

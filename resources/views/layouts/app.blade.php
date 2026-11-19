@@ -5,7 +5,27 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>@yield('title', 'Pemilihan OSIS') — Sistem E-Voting OSIS</title>
   <meta name="robots" content="noindex, nofollow">
-  @php $faviconUrl = ($faviconLogo = ($appSetting ?? $setting ?? \App\Models\ElectionSetting::current())->logo_path) ? asset('uploads/' . $faviconLogo) : asset('favicon.ico'); @endphp
+  @php
+    $seoSetting = $appSetting ?? $setting ?? \App\Models\ElectionSetting::current();
+    $faviconUrl = $seoSetting->logo_path ? asset('uploads/' . $seoSetting->logo_path) : asset('favicon.ico');
+    $seoImage = $seoSetting->logo_path ? asset('uploads/' . $seoSetting->logo_path) : asset('uploads/hero.jpg');
+    $seoTitle = trim($__env->yieldContent('title', 'Pemilihan OSIS')) . ' — Sistem E-Voting OSIS';
+    $seoDescription = $seoSetting->nama_kegiatan . ' — ' . $seoSetting->nama_sekolah . ' (' . $seoSetting->tahun_ajaran . ')';
+  @endphp
+  <link rel="image_src" href="{{ $seoImage }}">
+  <meta itemprop="image" content="{{ $seoImage }}">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="id_ID">
+  <meta property="og:title" content="{{ $seoTitle }}">
+  <meta property="og:description" content="{{ $seoDescription }}">
+  <meta property="og:url" content="{{ url()->current() }}">
+  <meta property="og:image" content="{{ $seoImage }}">
+  <meta property="og:image:secure_url" content="{{ $seoImage }}">
+  <meta property="og:image:alt" content="Logo {{ $seoSetting->nama_sekolah }}">
+  <meta name="twitter:card" content="{{ $seoSetting->logo_path ? 'summary' : 'summary_large_image' }}">
+  <meta name="twitter:title" content="{{ $seoTitle }}">
+  <meta name="twitter:description" content="{{ $seoDescription }}">
+  <meta name="twitter:image" content="{{ $seoImage }}">
   <link rel="icon" href="{{ $faviconUrl }}">
   <link rel="apple-touch-icon" href="{{ $faviconUrl }}">
 

@@ -231,8 +231,8 @@
 
 @push('modals')
 
-  <div id="panduan-modal" class="hidden fixed inset-0 w-screen h-screen z-[100] flex items-end sm:items-center justify-center sm:p-4 bg-black/50 backdrop-blur-sm opacity-0 transition-opacity duration-200" onclick="closeAppModal('panduan-modal')">
-    <div onclick="event.stopPropagation()" class="bg-white border border-notion-border rounded-t-2xl sm:rounded-2xl max-w-lg w-full max-h-[90vh] flex flex-col shadow-xl transform translate-y-6 sm:translate-y-0 sm:scale-95 transition-all duration-200 overflow-hidden">
+  <div id="panduan-modal" class="hidden fixed inset-0 h-[100dvh] w-full z-[100] flex items-end sm:items-center justify-center sm:p-4 bg-black/50 backdrop-blur-sm opacity-0 transition-opacity duration-200" onclick="closeAppModal('panduan-modal')">
+    <div onclick="event.stopPropagation()" class="bg-white border border-notion-border rounded-t-2xl sm:rounded-2xl max-w-lg w-full max-h-[85dvh] sm:max-h-[90dvh] flex flex-col shadow-xl transform translate-y-6 sm:translate-y-0 sm:scale-95 transition-all duration-200 overflow-hidden">
       <div class="sm:hidden pt-2.5 pb-1 flex justify-center shrink-0 bg-white"><div class="w-10 h-1.5 bg-notion-border rounded-full"></div></div>
       <div class="sticky top-0 z-10 bg-white px-6 py-4 border-b border-notion-border flex items-center justify-between shrink-0">
         <div class="flex items-center gap-2">
@@ -261,7 +261,7 @@
           </div>
         @endforeach
       </div>
-      <div class="sticky bottom-0 z-10 bg-white px-6 py-4 border-t border-notion-border flex items-center justify-between gap-2 shrink-0">
+      <div class="sticky bottom-0 z-10 bg-white px-6 py-4 pb-[max(1rem,env(safe-area-inset-bottom))] border-t border-notion-border flex items-center justify-between gap-2 shrink-0">
         <a href="{{ route('voting.index') }}" class="text-sm font-semibold text-notion-blue hover:underline inline-flex items-center gap-1">
           Buka Bilik Suara <i data-lucide="arrow-right" class="w-4 h-4"></i>
         </a>
@@ -270,8 +270,8 @@
     </div>
   </div>
 
-  <div id="visi-misi-modal" class="hidden fixed inset-0 w-screen h-screen z-[100] flex items-end sm:items-center justify-center sm:p-4 bg-black/50 backdrop-blur-sm opacity-0 transition-opacity duration-200" onclick="closeAppModal('visi-misi-modal')">
-    <div onclick="event.stopPropagation()" class="bg-white border border-notion-border rounded-t-2xl sm:rounded-2xl max-w-lg w-full max-h-[90vh] flex flex-col shadow-xl transform translate-y-6 sm:translate-y-0 sm:scale-95 transition-all duration-200 overflow-hidden">
+  <div id="visi-misi-modal" class="hidden fixed inset-0 h-[100dvh] w-full z-[100] flex items-end sm:items-center justify-center sm:p-4 bg-black/50 backdrop-blur-sm opacity-0 transition-opacity duration-200" onclick="closeAppModal('visi-misi-modal')">
+    <div onclick="event.stopPropagation()" class="bg-white border border-notion-border rounded-t-2xl sm:rounded-2xl max-w-lg w-full max-h-[85dvh] sm:max-h-[90dvh] flex flex-col shadow-xl transform translate-y-6 sm:translate-y-0 sm:scale-95 transition-all duration-200 overflow-hidden">
       <div class="sm:hidden pt-2.5 pb-1 flex justify-center shrink-0 bg-white"><div class="w-10 h-1.5 bg-notion-border rounded-full"></div></div>
       <div class="sticky top-0 z-10 bg-white px-6 py-4 border-b border-notion-border flex items-center justify-between shrink-0">
         <div>
@@ -293,7 +293,7 @@
           <div id="vm-misi" class="text-sm text-notion-text leading-relaxed space-y-2 break-words whitespace-normal min-w-0 [overflow-wrap:anywhere]"></div>
         </div>
       </div>
-      <div class="sticky bottom-0 z-10 bg-white px-6 py-4 border-t border-notion-border flex items-center justify-between gap-2 shrink-0">
+      <div class="sticky bottom-0 z-10 bg-white px-6 py-4 pb-[max(1rem,env(safe-area-inset-bottom))] border-t border-notion-border flex items-center justify-between gap-2 shrink-0">
         <a href="{{ route('voting.index') }}" class="text-sm font-semibold text-notion-blue hover:underline inline-flex items-center gap-1">
           Lanjut ke Bilik Suara <i data-lucide="arrow-right" class="w-4 h-4"></i>
         </a>
