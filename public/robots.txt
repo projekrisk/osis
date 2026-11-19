@@ -1,0 +1,14 @@
+User-agent: *
+Allow: /
+Disallow: /login
+Disallow: /dasbor
+Disallow: /pantau-tps
+Disallow: /pemilih
+Disallow: /kandidat
+Disallow: /tps
+Disallow: /rekapitulasi
+Disallow: /pengguna
+Disallow: /pengaturan
+Disallow: /bilik
+
+Sitemap: /sitemap.xml

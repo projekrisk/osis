@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Workspace UI Kit &amp; Dashboard Reference</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&display=swap" rel="stylesheet">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Bricolage Grotesque"', 'sans-serif'],
+            mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'monospace'],
+          },
+          colors: {
+            notion: {
+              bg: '#ffffff',
+              sidebar: '#f7f7f5',
+              hover: '#efefed',
+              text: '#222222',
+              gray: '#666666',
+              border: '#e5e5e5',
+              blue: '#2563eb',
+              blueHover: '#1d4ed8',
+              red: '#e03e3e',
+              redBg: '#fbdbdc',
+              green: '#0f7b6c',
+              greenBg: '#ebeced'
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    html { font-size: 16px; }
+    body { background-color: #ffffff; color: #222222; font-size: 14px; }
+
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #d3d1cb; border-radius: 4px; border: 2px solid transparent; background-clip: padding-box; }
+    ::-webkit-scrollbar-thumb:hover { background: #aeaca6; border: 2px solid transparent; background-clip: padding-box; }
+
+    .tnum { font-variant-numeric: tabular-nums; }
+    .sidebar-transition { transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), width 0.28s cubic-bezier(0.4, 0, 0.2, 1); }
+    .sidebar-label { transition: opacity 0.2s ease, width 0.2s ease; white-space: nowrap; }
+
+    @media (min-width: 768px) {
+      #demo-sidebar.sidebar-collapsed { width: 68px !important; }
+      #demo-sidebar.sidebar-collapsed .sidebar-label,
+      #demo-sidebar.sidebar-collapsed .sidebar-heading { display: none; }
+      #demo-sidebar.sidebar-collapsed .sidebar-brand { justify-content: center; padding-left: 0; padding-right: 0; margin-left: 0.5rem; margin-right: 0.5rem; }
+      #demo-sidebar.sidebar-collapsed .sidebar-brand-icon { margin-right: 0; }
+      #demo-sidebar.sidebar-collapsed .sidebar-link { justify-content: center; padding-left: 0; padding-right: 0; gap: 0; }
+    }
+
+    @keyframes smoothReveal {
+      from { opacity: 0; transform: translateY(-4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-reveal { animation: smoothReveal 0.22s cubic-bezier(0.4, 0, 0.2, 1); }
+
+    @keyframes toastSlideIn {
+      from { opacity: 0; transform: translateY(14px) scale(0.98); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    .animate-toast { animation: toastSlideIn 0.25s cubic-bezier(0.4, 0, 0.2, 1); }
+
+    input:not([type="checkbox"]):not([type="radio"]):focus,
+    textarea:focus,
+    select:focus {
+      outline: none !important;
+      border-color: #2563eb !important;
+      box-shadow: 0 0 0 1px #2563eb !important;
+    }
+  </style>
+</head>
+<body class="antialiased selection:bg-notion-blue/20 flex flex-col min-h-screen">
+
+  <!-- Sticky Top Reference Nav -->
+  <header class="sticky top-0 bg-white/85 backdrop-blur-md border-b border-notion-border z-40">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 h-13 py-2.5 flex items-center justify-between gap-3">
+      <div class="flex items-center gap-2.5 min-w-0">
+        <div class="w-7 h-7 rounded bg-notion-text text-white flex items-center justify-center shrink-0">
+          <i data-lucide="layout-template" class="w-4 h-4"></i>
+        </div>
+        <span class="font-bold text-notion-text truncate">Workspace UI &amp; Component Reference</span>
+      </div>
+      <nav class="hidden md:flex items-center gap-1 text-sm text-notion-gray overflow-x-auto whitespace-nowrap">
+        <a href="#tokens" class="px-2.5 py-1 rounded hover:bg-notion-hover hover:text-notion-text">Tokens</a>
+        <a href="#typography" class="px-2.5 py-1 rounded hover:bg-notion-hover hover:text-notion-text">Typography</a>
+        <a href="#shell" class="px-2.5 py-1 rounded hover:bg-notion-hover hover:text-notion-text">App Shell</a>
+        <a href="#buttons" class="px-2.5 py-1 rounded hover:bg-notion-hover hover:text-notion-text">Buttons &amp; Tabs</a>
+        <a href="#forms" class="px-2.5 py-1 rounded hover:bg-notion-hover hover:text-notion-text">Forms</a>
+        <a href="#tables" class="px-2.5 py-1 rounded hover:bg-notion-hover hover:text-notion-text">Table &amp; Collapse</a>
+        <a href="#modals" class="px-2.5 py-1 rounded hover:bg-notion-hover hover:text-notion-text">Modal &amp; Toast</a>
+        <a href="#agent-prompt" class="px-2.5 py-1 rounded bg-notion-hover text-notion-text font-medium">Agent Prompt</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="flex-1 w-full max-w-6xl mx-auto px-4 sm:px-6 py-10 space-y-16">
+
+    <!-- Intro -->
+    <section class="space-y-3 border-b border-notion-border pb-8">
+      <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-notion-sidebar border border-notion-border text-xs font-medium text-notion-gray">
+        <i data-lucide="sparkles" class="w-3.5 h-3.5 text-notion-blue"></i> Single-File Design System
+      </span>
+      <h1 class="text-3xl sm:text-4xl font-bold tracking-tight text-notion-text">Workspace / Notion-Style Dashboard UI Kit</h1>
+      <p class="text-notion-gray text-sm sm:text-base max-w-3xl leading-relaxed">
+        Referensi lengkap warna, tipografi, tata letak sidebar collapse (mini-rail), tabel responsif dengan mobile accordion collapse, droplist modern, upload file, modal bottom-sheet, dan prompt siap pakai untuk agen AI.
+      </p>
+    </section>
+
+    <!-- 1. DESIGN TOKENS -->
+    <section id="tokens" class="space-y-6 scroll-mt-20">
+      <div class="flex items-center gap-2 border-b border-notion-border pb-2">
+        <i data-lucide="palette" class="w-5 h-5 text-notion-gray"></i>
+        <h2 class="text-xl font-bold">1. Color Tokens &amp; Surfaces</h2>
+      </div>
+
+      <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-3">
+        <div class="border border-notion-border rounded-lg p-3 bg-white space-y-2">
+          <div class="h-10 rounded border border-notion-border bg-notion-bg"></div>
+          <div><p class="text-xs font-semibold">notion.bg</p><p class="text-xs font-mono text-notion-gray">#ffffff</p></div>
+        </div>
+        <div class="border border-notion-border rounded-lg p-3 bg-white space-y-2">
+          <div class="h-10 rounded border border-notion-border bg-notion-sidebar"></div>
+          <div><p class="text-xs font-semibold">notion.sidebar</p><p class="text-xs font-mono text-notion-gray">#f7f7f5</p></div>
+        </div>
+        <div class="border border-notion-border rounded-lg p-3 bg-white space-y-2">
+          <div class="h-10 rounded border border-notion-border bg-notion-hover"></div>
+          <div><p class="text-xs font-semibold">notion.hover</p><p class="text-xs font-mono text-notion-gray">#efefed</p></div>
+        </div>
+        <div class="border border-notion-border rounded-lg p-3 bg-white space-y-2">
+          <div class="h-10 rounded bg-notion-text"></div>
+          <div><p class="text-xs font-semibold">notion.text</p><p class="text-xs font-mono text-notion-gray">#222222</p></div>
+        </div>
+        <div class="border border-notion-border rounded-lg p-3 bg-white space-y-2">
+          <div class="h-10 rounded bg-notion-blue"></div>
+          <div><p class="text-xs font-semibold">notion.blue</p><p class="text-xs font-mono text-notion-gray">#2563eb</p></div>
+        </div>
+        <div class="border border-notion-border rounded-lg p-3 bg-white space-y-2">
+          <div class="h-10 rounded bg-notion-redBg border border-red-200 flex items-center justify-center text-xs font-bold text-notion-red">Aa</div>
+          <div><p class="text-xs font-semibold">notion.red / redBg</p><p class="text-xs font-mono text-notion-gray">#e03e3e / #fbdbdc</p></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. TYPOGRAPHY -->
+    <section id="typography" class="space-y-6 scroll-mt-20">
+      <div class="flex items-center gap-2 border-b border-notion-border pb-2">
+        <i data-lucide="type" class="w-5 h-5 text-notion-gray"></i>
+        <h2 class="text-xl font-bold">2. Typography Scale (Bricolage Grotesque &amp; Monospace)</h2>
+      </div>
+
+      <div class="border border-notion-border rounded-lg bg-white divide-y divide-notion-border">
+        <div class="p-4 flex flex-col sm:flex-row sm:items-baseline justify-between gap-2">
+          <h1 class="text-3xl sm:text-4xl font-bold tracking-tight">Heading 1 — Judul Halaman Utama</h1>
+          <span class="text-xs font-mono text-notion-gray shrink-0">text-3xl sm:text-4xl font-bold tracking-tight</span>
+        </div>
+        <div class="p-4 flex flex-col sm:flex-row sm:items-baseline justify-between gap-2">
+          <h2 class="text-lg font-semibold">Heading 2 — Judul Bagian / Kartu</h2>
+          <span class="text-xs font-mono text-notion-gray shrink-0">text-lg font-semibold</span>
+        </div>
+        <div class="p-4 flex flex-col sm:flex-row sm:items-baseline justify-between gap-2">
+          <p class="text-sm text-notion-text">Body Text — Paragraf standar antarmuka dengan kontras tinggi dan keterbacaan optimal.</p>
+          <span class="text-xs font-mono text-notion-gray shrink-0">text-sm text-notion-text (14px)</span>
+        </div>
+        <div class="p-4 flex flex-col sm:flex-row sm:items-baseline justify-between gap-2">
+          <p class="text-sm text-notion-gray">Muted Subtitle — Deskripsi formal di bawah judul halaman.</p>
+          <span class="text-xs font-mono text-notion-gray shrink-0">text-sm text-notion-gray (#666666)</span>
+        </div>
+        <div class="p-4 flex flex-col sm:flex-row sm:items-baseline justify-between gap-2">
+          <div class="flex items-center gap-3">
+            <span class="font-mono text-sm bg-notion-hover px-2 py-0.5 rounded border border-notion-border">198501012010011002</span>
+            <span class="tnum text-xl font-semibold">1.240</span>
+          </div>
+          <span class="text-xs font-mono text-notion-gray shrink-0">font-mono / .tnum (tabular-nums)</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. INTERACTIVE APP SHELL (COLLAPSIBLE SIDEBAR + KPI + HEADER) -->
+    <section id="shell" class="space-y-6 scroll-mt-20">
+      <div class="flex items-center justify-between border-b border-notion-border pb-2">
+        <div class="flex items-center gap-2">
+          <i data-lucide="panel-left" class="w-5 h-5 text-notion-gray"></i>
+          <h2 class="text-xl font-bold">3. App Shell, Collapsible Sidebar (Mini-Rail) &amp; KPI Strip</h2>
+        </div>
+        <button type="button" onclick="toggleDemoDesktopSidebar()" class="px-3 py-1.5 bg-white border border-notion-border rounded-md text-xs font-medium hover:bg-notion-hover inline-flex items-center gap-1.5">
+          <i data-lucide="panel-left" class="w-3.5 h-3.5"></i> Toggle Collapse Sidebar
+        </button>
+      </div>
+
+      <div class="border border-notion-border rounded-xl overflow-hidden shadow-sm bg-white h-[430px] flex relative">
+        <!-- Mobile Overlay inside Demo -->
+        <div id="demo-mobile-overlay" onclick="toggleDemoMobileSidebar()" class="absolute inset-0 bg-black/20 z-30 hidden md:hidden"></div>
+
+        <!-- Sidebar -->
+        <aside id="demo-sidebar" class="sidebar-transition absolute md:static inset-y-0 left-0 w-[265px] bg-notion-sidebar border-r border-notion-border flex flex-col z-40 transform -translate-x-full md:translate-x-0 h-full shrink-0 overflow-hidden">
+          <div class="sidebar-brand h-12 flex items-center px-4 hover:bg-notion-hover transition-colors mt-2 mx-2 rounded-md">
+            <div class="sidebar-brand-icon w-7 h-7 rounded bg-notion-text text-white flex items-center justify-center mr-2.5 shrink-0">
+              <i data-lucide="clipboard-check" class="w-4 h-4"></i>
+            </div>
+            <div class="sidebar-label flex-1 min-w-0">
+              <p class="font-semibold text-sm text-notion-text truncate">Instansi / Sekolah</p>
+            </div>
+          </div>
+
+          <div class="mt-4 px-2 flex-1 overflow-y-auto space-y-4">
+            <div>
+              <p class="sidebar-heading px-3 text-xs font-semibold text-notion-gray mb-1.5">Menu Utama</p>
+              <nav class="space-y-0.5">
+                <a href="javascript:void(0)" title="Dasbor" class="sidebar-link flex items-center gap-2.5 px-3 py-1.5 text-sm rounded-md bg-notion-hover text-notion-text font-semibold">
+                  <i data-lucide="bar-chart-2" class="w-4 h-4 shrink-0"></i>
+                  <span class="sidebar-label truncate">Dasbor</span>
+                </a>
+                <a href="javascript:void(0)" title="Bank Soal" class="sidebar-link flex items-center gap-2.5 px-3 py-1.5 text-sm rounded-md text-notion-gray hover:bg-notion-hover hover:text-notion-text font-medium transition-colors">
+                  <i data-lucide="book-open" class="w-4 h-4 shrink-0"></i>
+                  <span class="sidebar-label truncate">Bank Soal</span>
+                </a>
+                <a href="javascript:void(0)" title="Jadwal &amp; Monitoring" class="sidebar-link flex items-center gap-2.5 px-3 py-1.5 text-sm rounded-md text-notion-gray hover:bg-notion-hover hover:text-notion-text font-medium transition-colors">
+                  <i data-lucide="calendar-clock" class="w-4 h-4 shrink-0"></i>
+                  <span class="sidebar-label truncate">Jadwal &amp; Monitoring</span>
+                </a>
+              </nav>
+            </div>
+            <div>
+              <p class="sidebar-heading px-3 text-xs font-semibold text-notion-gray mb-1.5">Master Data</p>
+              <nav class="space-y-0.5">
+                <a href="javascript:void(0)" title="Data Siswa" class="sidebar-link flex items-center gap-2.5 px-3 py-1.5 text-sm rounded-md text-notion-gray hover:bg-notion-hover hover:text-notion-text font-medium transition-colors">
+                  <i data-lucide="users" class="w-4 h-4 shrink-0"></i>
+                  <span class="sidebar-label truncate">Data Siswa</span>
+                </a>
+                <a href="javascript:void(0)" title="Pengaturan" class="sidebar-link flex items-center gap-2.5 px-3 py-1.5 text-sm rounded-md text-notion-gray hover:bg-notion-hover hover:text-notion-text font-medium transition-colors">
+                  <i data-lucide="settings" class="w-4 h-4 shrink-0"></i>
+                  <span class="sidebar-label truncate">Pengaturan</span>
+                </a>
+              </nav>
+            </div>
+          </div>
+
+          <div class="p-3 border-t border-notion-border">
+            <a href="javascript:void(0)" title="Ganti Password" class="sidebar-link flex items-center gap-2 px-2.5 py-1.5 text-sm text-notion-gray hover:bg-notion-hover hover:text-notion-text rounded-md transition-colors">
+              <i data-lucide="key-round" class="w-4 h-4 shrink-0"></i>
+              <span class="sidebar-label truncate">Ganti Password</span>
+            </a>
+          </div>
+        </aside>
+
+        <!-- Main Area -->
+        <div class="flex-1 flex flex-col min-w-0 bg-white">
+          <header class="h-12 flex items-center px-4 justify-between shrink-0 border-b border-notion-border/70 bg-white">
+            <div class="flex items-center gap-2">
+              <button type="button" onclick="toggleDemoMobileSidebar()" class="md:hidden p-1 text-notion-gray hover:bg-notion-hover rounded">
+                <i data-lucide="menu" class="w-4 h-4"></i>
+              </button>
+              <button type="button" onclick="toggleDemoDesktopSidebar()" class="hidden md:inline-flex p-1.5 text-notion-gray hover:text-notion-text hover:bg-notion-hover rounded transition-colors" title="Tutup / Buka Sidebar">
+                <i data-lucide="panel-left" class="w-4 h-4"></i>
+              </button>
+              <div class="flex items-center text-sm text-notion-gray">
+                <span>Workspace</span>
+                <span class="mx-1.5">/</span>
+                <span class="text-notion-text font-medium">Dasbor</span>
+              </div>
+            </div>
+            <div class="flex items-center gap-2">
+              <div class="w-7 h-7 rounded-full border border-notion-border bg-notion-sidebar flex items-center justify-center text-xs font-bold">SA</div>
+              <span class="text-sm font-medium hidden sm:inline">Super Admin</span>
+            </div>
+          </header>
+
+          <div class="p-6 overflow-y-auto space-y-6">
+            <!-- Page Header -->
+            <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+              <div class="space-y-2">
+                <i data-lucide="bar-chart-2" class="w-10 h-10 text-notion-text/80"></i>
+                <h3 class="text-2xl font-bold tracking-tight">Dasbor</h3>
+                <p class="text-notion-gray text-sm">Ringkasan pelaksanaan dan pemantauan sistem secara terpusat.</p>
+              </div>
+              <button type="button" class="inline-flex items-center gap-2 px-3.5 py-2 bg-notion-text text-white text-sm font-medium rounded-md hover:bg-black transition-colors shrink-0">
+                <i data-lucide="download" class="w-4 h-4"></i> Aksi Utama
+              </button>
+            </div>
+
+            <!-- KPI Minimalist Grid -->
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-5 pt-4 border-t border-notion-border">
+              <div class="flex flex-col">
+                <span class="text-xs font-medium text-notion-gray mb-1">Total Peserta</span>
+                <span class="text-2xl font-semibold text-notion-text tnum">1.240</span>
+              </div>
+              <div class="flex flex-col sm:border-l border-notion-border sm:pl-5">
+                <span class="text-xs font-medium text-notion-gray mb-1">Paket Aktif</span>
+                <span class="text-2xl font-semibold text-notion-text tnum">38</span>
+              </div>
+              <div class="flex flex-col border-t sm:border-t-0 sm:border-l border-notion-border pt-3 sm:pt-0 sm:pl-5">
+                <span class="text-xs font-medium text-notion-gray mb-1">Sedang Berlangsung</span>
+                <span class="text-2xl font-semibold text-notion-blue tnum">4</span>
+              </div>
+              <div class="flex flex-col border-t sm:border-t-0 sm:border-l border-notion-border pt-3 sm:pt-0 sm:pl-5">
+                <span class="text-xs font-medium text-notion-gray mb-1">Perlu Tinjauan</span>
+                <span class="text-2xl font-semibold text-amber-600 tnum">12</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. BUTTONS, BADGES & SCROLLABLE TABS -->
+    <section id="buttons" class="space-y-6 scroll-mt-20">
+      <div class="flex items-center gap-2 border-b border-notion-border pb-2">
+        <i data-lucide="mouse-pointer-click" class="w-5 h-5 text-notion-gray"></i>
+        <h2 class="text-xl font-bold">4. Buttons, Status Badges &amp; Horizontal Scroll Tabs</h2>
+      </div>
+
+      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
+        <button type="button" class="px-4 py-2 bg-notion-text text-white text-sm font-medium rounded-md hover:bg-black transition-colors shadow-sm">Primary</button>
+        <button type="button" class="px-4 py-2 bg-notion-blue text-white text-sm font-medium rounded-md hover:bg-notion-blueHover transition-colors shadow-sm inline-flex items-center justify-center gap-1.5">
+          <i data-lucide="plus" class="w-4 h-4"></i> Tambah
+        </button>
+        <button type="button" class="px-4 py-2 bg-white border border-notion-border text-notion-text text-sm font-medium rounded-md hover:bg-notion-hover transition-colors inline-flex items-center justify-center gap-1.5">
+          <i data-lucide="printer" class="w-4 h-4 text-notion-gray"></i> Outline
+        </button>
+        <button type="button" class="px-4 py-2 bg-transparent text-notion-gray text-sm font-medium rounded-md hover:bg-notion-hover hover:text-notion-text transition-colors">Ghost</button>
+        <button type="button" class="px-4 py-2 bg-notion-redBg text-notion-red text-sm font-medium rounded-md hover:bg-red-200 transition-colors inline-flex items-center justify-center gap-1.5">
+          <i data-lucide="trash-2" class="w-4 h-4"></i> Hapus
+        </button>
+      </div>
+
+      <div class="flex flex-wrap items-center gap-2 pt-2">
+        <span class="px-2.5 py-0.5 rounded text-xs font-medium bg-emerald-50 text-emerald-700 border border-emerald-200">Berlangsung / Aktif</span>
+        <span class="px-2.5 py-0.5 rounded text-xs font-medium bg-blue-50 text-notion-blue border border-blue-200 inline-flex items-center gap-1"><i data-lucide="lock" class="w-3 h-3"></i> Terkunci</span>
+        <span class="px-2.5 py-0.5 rounded text-xs font-medium bg-amber-50 text-amber-800 border border-amber-200">Menunggu / Perlu Perbaikan</span>
+        <span class="px-2.5 py-0.5 rounded text-xs font-medium bg-notion-hover text-notion-gray border border-notion-border">Draft / Selesai</span>
+      </div>
+
+      <!-- Horizontal Scrollable Tabs -->
+      <div class="border border-notion-border rounded-lg bg-white p-4 space-y-3">
+        <div class="border-b border-notion-border flex flex-nowrap gap-1 overflow-x-auto whitespace-nowrap -mx-1 px-1">
+          <button type="button" onclick="switchDemoTab(this, 'tab-1')" class="demo-tab shrink-0 whitespace-nowrap px-4 py-2 text-sm font-medium border-b-2 border-notion-blue text-notion-blue flex items-center gap-2">
+            <i data-lucide="building-2" class="w-4 h-4"></i> Instansi
+          </button>
+          <button type="button" onclick="switchDemoTab(this, 'tab-2')" class="demo-tab shrink-0 whitespace-nowrap px-4 py-2 text-sm font-medium border-b-2 border-transparent text-notion-gray hover:text-notion-text flex items-center gap-2">
+            <i data-lucide="calendar-range" class="w-4 h-4"></i> Kegiatan
+          </button>
+          <button type="button" onclick="switchDemoTab(this, 'tab-3')" class="demo-tab shrink-0 whitespace-nowrap px-4 py-2 text-sm font-medium border-b-2 border-transparent text-notion-gray hover:text-notion-text flex items-center gap-2">
+            <i data-lucide="shield-alert" class="w-4 h-4"></i> App List
+            <span class="px-1.5 py-0.5 text-xs rounded bg-notion-hover text-notion-text tnum">3</span>
+          </button>
+        </div>
+        <div id="tab-1" class="demo-tab-panel text-sm text-notion-gray">Konten Tab Instansi — tab otomatis dapat di-scroll ke kiri/kanan pada layar sempit.</div>
+        <div id="tab-2" class="demo-tab-panel hidden text-sm text-notion-gray">Konten Tab Kegiatan — pengaturan nama kegiatan &amp; tahun ajaran.</div>
+        <div id="tab-3" class="demo-tab-panel hidden text-sm text-notion-gray">Konten Tab App List — manajemen daftar paket aplikasi.</div>
+      </div>
+    </section>
+
+    <!-- 5. FORM ELEMENTS -->
+    <section id="forms" class="space-y-6 scroll-mt-20">
+      <div class="flex items-center gap-2 border-b border-notion-border pb-2">
+        <i data-lucide="sliders-horizontal" class="w-5 h-5 text-notion-gray"></i>
+        <h2 class="text-xl font-bold">5. Form Controls (Modern Select, File Upload, Eye Toggle &amp; Choice Pills)</h2>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 border border-notion-border rounded-lg bg-white p-6 shadow-sm">
+        <div class="space-y-4">
+          <div>
+            <label class="block text-sm font-medium mb-1">Input Teks Standar</label>
+            <input type="text" placeholder="Masukkan nama instansi..." class="w-full border border-notion-border rounded-md px-3 py-2 text-sm bg-white">
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium mb-1">Password dengan Fitur Lihat</label>
+            <div class="relative">
+              <input type="password" id="demo-pw-input" value="Rahasia123" class="w-full border border-notion-border rounded-md pl-3 pr-10 py-2 text-sm bg-white">
+              <button type="button" onclick="toggleDemoPassword('demo-pw-input', this)" class="absolute inset-y-0 right-0 px-3 flex items-center text-notion-gray hover:text-notion-text">
+                <i data-lucide="eye" class="w-4 h-4"></i>
+              </button>
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium mb-1">Modern Select Droplist (Auto-Search &gt; 3 Opsi)</label>
+            <select class="modern-select w-full">
+              <option value="">Pilih Kelas...</option>
+              <option value="X-E1">X-E1</option>
+              <option value="X-E2">X-E2</option>
+              <option value="XI-F1">XI-F1</option>
+              <option value="XII-A1">XII-A1</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="space-y-4">
+          <div>
+            <label class="block text-sm font-medium mb-1.5">Logo / Media Preview + Tombol Hapus Modern</label>
+            <div class="mb-2.5 flex items-center justify-between gap-3 p-3 rounded-xl bg-notion-sidebar/50 border border-notion-border">
+              <div class="flex items-center gap-3 min-w-0">
+                <div class="w-12 h-12 rounded-lg bg-white border border-notion-border flex items-center justify-center shrink-0">
+                  <i data-lucide="image" class="w-5 h-5 text-notion-gray"></i>
+                </div>
+                <div class="min-w-0">
+                  <p class="text-sm font-semibold text-notion-text truncate">Logo Aktif</p>
+                  <p class="text-xs text-notion-gray truncate">Tampil pada kop dokumen.</p>
+                </div>
+              </div>
+              <button type="button" onclick="showToast('Contoh aksi hapus media', 'info')" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium border border-red-200 bg-white text-notion-red hover:bg-notion-red hover:text-white transition-all shrink-0">
+                <i data-lucide="trash-2" class="w-3.5 h-3.5"></i> Hapus
+              </button>
+            </div>
+            <input type="file" accept="image/*" class="modern-file" data-placeholder="Pilih atau seret file gambar...">
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium mb-1.5">Tombol Pilihan Kiri-Kanan (Benar / Salah)</label>
+            <div class="grid grid-cols-2 gap-2.5">
+              <label class="cursor-pointer">
+                <input type="radio" name="demo_tf" value="true" checked class="peer sr-only">
+                <span class="w-full py-2 px-3 rounded-md border border-notion-border bg-white text-sm font-medium flex items-center justify-center gap-2 peer-checked:bg-emerald-50 peer-checked:border-emerald-500 peer-checked:text-emerald-700 transition-all">
+                  <i data-lucide="check-circle-2" class="w-4 h-4"></i> Benar
+                </span>
+              </label>
+              <label class="cursor-pointer">
+                <input type="radio" name="demo_tf" value="false" class="peer sr-only">
+                <span class="w-full py-2 px-3 rounded-md border border-notion-border bg-white text-sm font-medium flex items-center justify-center gap-2 peer-checked:bg-notion-redBg peer-checked:border-notion-red peer-checked:text-notion-red transition-all">
+                  <i data-lucide="x-circle" class="w-4 h-4"></i> Salah
+                </span>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. RESPONSIVE TABLE + MOBILE COLLAPSE ACCORDION -->
+    <section id="tables" class="space-y-6 scroll-mt-20">
+      <div class="flex items-center gap-2 border-b border-notion-border pb-2">
+        <i data-lucide="table-2" class="w-5 h-5 text-notion-gray"></i>
+        <h2 class="text-xl font-bold">6. Table Toolbar Justify &amp; Mobile Collapse Accordion</h2>
+      </div>
+
+      <div class="border border-notion-border rounded-lg bg-white overflow-hidden shadow-sm">
+        <!-- Justified Toolbar -->
+        <div class="p-4 border-b border-notion-border flex flex-col lg:flex-row lg:items-center justify-between gap-2.5 bg-notion-sidebar/40">
+          <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 flex-1 w-full">
+            <div class="relative flex-1 min-w-[200px]">
+              <i data-lucide="search" class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-notion-gray pointer-events-none"></i>
+              <input type="text" placeholder="Cari data..." class="w-full border border-notion-border rounded-md pl-9 pr-3 py-2 text-sm bg-white">
+            </div>
+            <div class="sm:w-44 shrink-0">
+              <select class="modern-select w-full">
+                <option value="">Semua Status</option>
+                <option value="active">Aktif</option>
+                <option value="draft">Draft</option>
+              </select>
+            </div>
+            <button type="button" class="px-3.5 py-2 bg-white border border-notion-border rounded-md text-sm font-medium hover:bg-notion-hover transition-colors whitespace-nowrap shrink-0">Filter</button>
+          </div>
+          <button type="button" onclick="openAppModal('demo-modal')" class="w-full lg:w-auto px-3.5 py-2 bg-notion-blue text-white text-sm font-medium rounded-md hover:bg-notion-blueHover transition-colors flex items-center justify-center gap-1.5 shrink-0 whitespace-nowrap">
+            <i data-lucide="plus" class="w-4 h-4"></i> Tambah Data
+          </button>
+        </div>
+
+        <!-- Desktop Table -->
+        <div class="hidden md:block overflow-x-auto">
+          <table class="w-full text-left text-sm whitespace-nowrap">
+            <thead class="bg-notion-sidebar text-notion-gray border-b border-notion-border">
+              <tr>
+                <th class="py-3 px-4 font-medium">Nama Item</th>
+                <th class="py-3 px-4 font-medium">Kode</th>
+                <th class="py-3 px-4 font-medium">Status</th>
+                <th class="py-3 px-4 font-medium text-right">Aksi</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-notion-border">
+              <tr class="hover:bg-notion-hover/50 transition-colors">
+                <td class="py-3 px-4 font-semibold text-notion-text">Matematika Wajib — Semester Ganjil</td>
+                <td class="py-3 px-4 font-mono text-notion-gray">MTK-X-01</td>
+                <td class="py-3 px-4"><span class="px-2.5 py-0.5 rounded text-xs font-medium bg-emerald-50 text-emerald-700 border border-emerald-200">Aktif</span></td>
+                <td class="py-3 px-4 text-right space-x-1">
+                  <button type="button" class="p-1.5 text-notion-gray hover:text-notion-blue hover:bg-blue-50 rounded"><i data-lucide="edit-2" class="w-4 h-4"></i></button>
+                  <button type="button" class="p-1.5 text-notion-gray hover:text-notion-red hover:bg-red-50 rounded"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                </td>
+              </tr>
+              <tr class="hover:bg-notion-hover/50 transition-colors">
+                <td class="py-3 px-4 font-semibold text-notion-text">Bahasa Indonesia — Uji Kompetensi</td>
+                <td class="py-3 px-4 font-mono text-notion-gray">IND-XI-02</td>
+                <td class="py-3 px-4"><span class="px-2.5 py-0.5 rounded text-xs font-medium bg-notion-hover text-notion-gray border border-notion-border">Draft</span></td>
+                <td class="py-3 px-4 text-right space-x-1">
+                  <button type="button" class="p-1.5 text-notion-gray hover:text-notion-blue hover:bg-blue-50 rounded"><i data-lucide="edit-2" class="w-4 h-4"></i></button>
+                  <button type="button" class="p-1.5 text-notion-gray hover:text-notion-red hover:bg-red-50 rounded"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Mobile Collapse Accordion (Single Row Open) -->
+        <div class="md:hidden divide-y divide-notion-border">
+          <div class="bg-white flex flex-col">
+            <div onclick="toggleMobileRow('demo', 0)" class="p-4 flex items-center justify-between cursor-pointer hover:bg-notion-hover/50">
+              <div>
+                <p class="font-semibold text-sm text-notion-text">Matematika Wajib — Semester Ganjil</p>
+                <p class="text-xs text-notion-gray font-mono">MTK-X-01</p>
+              </div>
+              <i data-lucide="chevron-down" id="demo-icon-0" class="w-4 h-4 text-notion-gray transition-transform duration-200 shrink-0"></i>
+            </div>
+            <div id="demo-detail-0" class="hidden px-4 pb-4 space-y-2 bg-notion-sidebar/30 border-t border-notion-border pt-3 text-sm">
+              <div class="flex justify-between"><span class="text-notion-gray">Status</span><span class="font-medium text-emerald-700">Aktif</span></div>
+              <div class="pt-2 border-t border-notion-border flex justify-end gap-2">
+                <button type="button" class="px-3 py-1 bg-white border border-notion-border rounded text-xs font-medium">Edit</button>
+                <button type="button" class="px-3 py-1 bg-notion-redBg text-notion-red rounded text-xs font-medium">Hapus</button>
+              </div>
+            </div>
+          </div>
+          <div class="bg-white flex flex-col">
+            <div onclick="toggleMobileRow('demo', 1)" class="p-4 flex items-center justify-between cursor-pointer hover:bg-notion-hover/50">
+              <div>
+                <p class="font-semibold text-sm text-notion-text">Bahasa Indonesia — Uji Kompetensi</p>
+                <p class="text-xs text-notion-gray font-mono">IND-XI-02</p>
+              </div>
+              <i data-lucide="chevron-down" id="demo-icon-1" class="w-4 h-4 text-notion-gray transition-transform duration-200 shrink-0"></i>
+            </div>
+            <div id="demo-detail-1" class="hidden px-4 pb-4 space-y-2 bg-notion-sidebar/30 border-t border-notion-border pt-3 text-sm">
+              <div class="flex justify-between"><span class="text-notion-gray">Status</span><span class="font-medium text-notion-gray">Draft</span></div>
+              <div class="pt-2 border-t border-notion-border flex justify-end gap-2">
+                <button type="button" class="px-3 py-1 bg-white border border-notion-border rounded text-xs font-medium">Edit</button>
+                <button type="button" class="px-3 py-1 bg-notion-redBg text-notion-red rounded text-xs font-medium">Hapus</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 7. MODALS & TOAST -->
+    <section id="modals" class="space-y-6 scroll-mt-20">
+      <div class="flex items-center gap-2 border-b border-notion-border pb-2">
+        <i data-lucide="layers" class="w-5 h-5 text-notion-gray"></i>
+        <h2 class="text-xl font-bold">7. Responsive Bottom-Sheet Modal &amp; Toast Notification</h2>
+      </div>
+
+      <div class="flex flex-wrap gap-3">
+        <button type="button" onclick="openAppModal('demo-modal')" class="px-4 py-2 bg-notion-blue text-white text-sm font-medium rounded-md hover:bg-notion-blueHover transition-colors">Buka Modal Form</button>
+        <button type="button" onclick="showToast('Data berhasil disimpan ke sistem.', 'success')" class="px-4 py-2 bg-white border border-notion-border text-sm font-medium rounded-md hover:bg-notion-hover transition-colors">Toast Sukses</button>
+        <button type="button" onclick="showToast('Terjadi kesalahan validasi input.', 'error')" class="px-4 py-2 bg-notion-redBg text-notion-red text-sm font-medium rounded-md hover:bg-red-200 transition-colors">Toast Error</button>
+      </div>
+    </section>
+
+    <!-- 8. AGENT PROMPT -->
+    <section id="agent-prompt" class="space-y-4 scroll-mt-20">
+      <div class="flex items-center justify-between border-b border-notion-border pb-2">
+        <div class="flex items-center gap-2">
+          <i data-lucide="bot" class="w-5 h-5 text-notion-gray"></i>
+          <h2 class="text-xl font-bold">8. Prompt Referensi untuk Agen AI</h2>
+        </div>
+        <button type="button" onclick="copyAgentPrompt()" class="px-3 py-1.5 bg-notion-text text-white text-xs font-medium rounded-md hover:bg-black transition-colors inline-flex items-center gap-1.5">
+          <i data-lucide="copy" class="w-3.5 h-3.5"></i> Salin Prompt
+        </button>
+      </div>
+
+      <div class="border border-notion-border rounded-lg bg-notion-sidebar/60 p-4">
+        <pre id="agent-prompt-text" class="text-xs sm:text-sm font-mono text-notion-text whitespace-pre-wrap leading-relaxed">Buatkan tampilan antarmuka web dashboard / halaman CRUD dengan mengacu sepenuhnya pada file `desain/component.html` sebagai Design System &amp; UI Reference:
+1. Gunakan font "Bricolage Grotesque" (sans) dan monospace untuk kode/angka dengan `.tnum` (`tabular-nums`), serta palet warna `notion` (`bg: #ffffff`, `sidebar: #f7f7f5`, `hover: #efefed`, `text: #222222`, `gray: #666666`, `border: #e5e5e5`, `blue: #2563eb`, `red: #e03e3e`, `redBg: #fbdbdc`).
+2. Gunakan App Shell dengan sidebar `285px` yang memiliki transisi halus ke mode mini-rail ikon saja (`68px`, `.sidebar-collapsed`) lewat tombol ikon `panel-left` di sebelah breadcrumb header, serta drawer overlay di mobile.
+3. Setiap halaman diawali Page Header bergaya dokumen (ikon Lucide `w-12 h-12`, judul `text-3xl font-bold tracking-tight`, dan deskripsi formal singkat `text-sm text-notion-gray`).
+4. Toolbar tabel harus rata penuh (justify): input pencarian `flex-1`, filter dropdown `select.modern-select` (auto-search jika &gt; 3 opsi), tombol Filter, dan tombol aksi utama di kanan.
+5. Setiap tabel wajib responsif: tampil sebagai `<table>` di desktop (`hidden md:block`) dan otomatis berubah menjadi accordion collapse single-open (`toggleMobileRow`) di layar mobile (`md:hidden`).
+6. Gunakan komponen `input.modern-file` untuk upload file, tombol toggle lihat/sembunyikan pada semua input password, tab horizontal scrollable (`flex-nowrap overflow-x-auto whitespace-nowrap`), modal bottom-sheet responsif (`openAppModal` / `closeAppModal`), serta notifikasi toast (`showToast`).</pre>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Demo Modal (Bottom Sheet di Mobile + Sticky Header) -->
+  <div id="demo-modal" class="hidden fixed inset-0 w-screen h-screen z-[100] flex items-end sm:items-center justify-center sm:p-4 bg-black/40 backdrop-blur-sm opacity-0 transition-opacity duration-200" onclick="closeAppModal('demo-modal')">
+    <div onclick="event.stopPropagation()" class="bg-white border border-notion-border rounded-t-2xl sm:rounded-xl max-w-md w-full max-h-[90vh] flex flex-col shadow-xl transform translate-y-6 sm:translate-y-0 sm:scale-95 transition-all duration-200 overflow-hidden">
+      <div class="sm:hidden pt-2.5 pb-1 flex justify-center shrink-0 bg-white">
+        <div class="w-10 h-1.5 bg-notion-border rounded-full"></div>
+      </div>
+      <div class="sticky top-0 z-10 bg-white px-6 py-4 border-b border-notion-border flex items-center justify-between shrink-0">
+        <h3 class="font-bold text-lg">Contoh Modal Form</h3>
+        <button type="button" onclick="closeAppModal('demo-modal')" class="p-1 text-notion-gray hover:text-notion-text rounded-md hover:bg-notion-hover"><i data-lucide="x" class="w-4 h-4"></i></button>
+      </div>
+      <div class="p-6 overflow-y-auto flex-1 space-y-4">
+        <div>
+          <label class="block text-sm font-medium mb-1">Judul Data</label>
+          <input type="text" placeholder="Masukkan judul..." class="w-full border border-notion-border rounded-md px-3 py-2 text-sm">
+        </div>
+        <div class="flex justify-end gap-2 pt-2">
+          <button type="button" onclick="closeAppModal('demo-modal')" class="px-4 py-2 text-sm text-notion-gray hover:bg-notion-hover rounded-md">Batal</button>
+          <button type="button" onclick="closeAppModal('demo-modal'); showToast('Simulasi simpan berhasil.', 'success')" class="px-4 py-2 bg-notion-blue text-white text-sm font-medium rounded-md hover:bg-notion-blueHover">Simpan</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div id="toast-container" class="fixed bottom-4 right-4 z-[130] flex flex-col gap-2 max-w-sm w-[calc(100%-2rem)] sm:w-auto pointer-events-none"></div>
+
+  <script>
+    function toggleDemoDesktopSidebar() {
+      document.getElementById('demo-sidebar')?.classList.toggle('sidebar-collapsed');
+    }
+
+    function toggleDemoMobileSidebar() {
+      const sb = document.getElementById('demo-sidebar');
+      const ov = document.getElementById('demo-mobile-overlay');
+      const isClosed = sb.classList.contains('-translate-x-full');
+      sb.classList.toggle('-translate-x-full', !isClosed);
+      ov.classList.toggle('hidden', !isClosed);
+    }
+
+    function switchDemoTab(btn, panelId) {
+      document.querySelectorAll('.demo-tab').forEach((t) => {
+        t.classList.remove('border-notion-blue', 'text-notion-blue');
+        t.classList.add('border-transparent', 'text-notion-gray');
+      });
+      btn.classList.add('border-notion-blue', 'text-notion-blue');
+      btn.classList.remove('border-transparent', 'text-notion-gray');
+      document.querySelectorAll('.demo-tab-panel').forEach((p) => p.classList.add('hidden'));
+      document.getElementById(panelId)?.classList.remove('hidden');
+    }
+
+    function toggleDemoPassword(inputId, btn) {
+      const input = document.getElementById(inputId);
+      if (!input) return;
+      const isHidden = input.type === 'password';
+      input.type = isHidden ? 'text' : 'password';
+      btn.innerHTML = `<i data-lucide="${isHidden ? 'eye-off' : 'eye'}" class="w-4 h-4"></i>`;
+      lucide.createIcons();
+    }
+
+    let currentMobRowOpen = null;
+    function toggleMobileRow(prefix, idx) {
+      const rowId = `${prefix}-${idx}`;
+      const detail = document.getElementById(`${prefix}-detail-${idx}`);
+      const icon = document.getElementById(`${prefix}-icon-${idx}`);
+      if (!detail) return;
+      if (currentMobRowOpen && currentMobRowOpen !== rowId) {
+        const [p, i] = currentMobRowOpen.split('-');
+        document.getElementById(`${p}-detail-${i}`)?.classList.add('hidden');
+        document.getElementById(`${p}-icon-${i}`)?.classList.remove('rotate-180');
+      }
+      const isOpen = !detail.classList.contains('hidden');
+      detail.classList.toggle('hidden', isOpen);
+      icon?.classList.toggle('rotate-180', !isOpen);
+      currentMobRowOpen = isOpen ? null : rowId;
+    }
+
+    function openAppModal(id) {
+      const modal = document.getElementById(id);
+      if (!modal) return;
+      const panel = modal.firstElementChild;
+      modal.classList.remove('hidden');
+      requestAnimationFrame(() => {
+        modal.classList.remove('opacity-0');
+        panel?.classList.remove('translate-y-6', 'sm:scale-95');
+      });
+    }
+
+    function closeAppModal(id) {
+      const modal = document.getElementById(id);
+      if (!modal) return;
+      const panel = modal.firstElementChild;
+      modal.classList.add('opacity-0');
+      panel?.classList.add('translate-y-6', 'sm:scale-95');
+      setTimeout(() => modal.classList.add('hidden'), 180);
+    }
+
+    function showToast(message, type = 'info') {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      const colors = {
+        success: 'bg-emerald-50 border-emerald-200 text-emerald-800',
+        error: 'bg-notion-redBg border-red-200 text-notion-red',
+        info: 'bg-white border-notion-border text-notion-text',
+      };
+      toast.className = `pointer-events-auto animate-toast border rounded-lg px-4 py-3 shadow-lg text-sm flex items-center justify-between gap-3 ${colors[type] || colors.info}`;
+      toast.innerHTML = `<span>${message}</span>`;
+      container.appendChild(toast);
+      setTimeout(() => toast.remove(), 3200);
+    }
+
+    function initModernSelects() {
+      document.querySelectorAll('select.modern-select').forEach((selectEl) => {
+        if (selectEl.dataset.upgraded) return;
+        selectEl.dataset.upgraded = '1';
+        selectEl.classList.add('hidden');
+
+        const wrapper = document.createElement('div');
+        wrapper.className = 'relative w-full';
+        selectEl.parentNode.insertBefore(wrapper, selectEl.nextSibling);
+
+        const trigger = document.createElement('button');
+        trigger.type = 'button';
+        trigger.className = 'w-full flex items-center justify-between border border-notion-border rounded-md px-3 py-2 text-sm bg-white hover:bg-notion-sidebar transition-colors text-left';
+        const labelSpan = document.createElement('span');
+        labelSpan.className = 'truncate text-notion-text';
+        const icon = document.createElement('i');
+        icon.setAttribute('data-lucide', 'chevron-down');
+        icon.className = 'w-4 h-4 text-notion-gray shrink-0 ml-2 transition-transform duration-150';
+        trigger.append(labelSpan, icon);
+
+        const menu = document.createElement('div');
+        menu.className = 'hidden absolute z-50 top-full left-0 w-full min-w-[180px] mt-1 bg-white border border-notion-border rounded-lg shadow-lg p-1.5';
+        const options = Array.from(selectEl.options);
+        const listBox = document.createElement('div');
+        listBox.className = 'max-h-52 overflow-y-auto space-y-0.5';
+
+        let searchInput = null;
+        if (options.length > 3) {
+          const searchWrap = document.createElement('div');
+          searchWrap.className = 'relative mb-1.5';
+          searchWrap.innerHTML = '<i data-lucide="search" class="w-4 h-4 absolute left-2.5 top-1/2 -translate-y-1/2 text-notion-gray pointer-events-none"></i>';
+          searchInput = document.createElement('input');
+          searchInput.type = 'text';
+          searchInput.placeholder = 'Cari...';
+          searchInput.className = 'w-full bg-notion-sidebar border border-notion-border rounded-md pl-8 pr-2.5 py-1.5 text-sm';
+          searchInput.addEventListener('input', () => renderOptions(searchInput.value));
+          searchInput.addEventListener('click', (e) => e.stopPropagation());
+          searchWrap.appendChild(searchInput);
+          menu.appendChild(searchWrap);
+        }
+        menu.appendChild(listBox);
+
+        function renderOptions(filter = '') {
+          listBox.innerHTML = '';
+          const q = filter.trim().toLowerCase();
+          options.forEach((opt) => {
+            if (q && !opt.text.toLowerCase().includes(q)) return;
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            const isSelected = opt.value === selectEl.value;
+            btn.className = `w-full text-left px-2.5 py-1.5 text-sm rounded-md flex items-center justify-between ${isSelected ? 'bg-notion-hover text-notion-text font-medium' : 'text-notion-gray hover:bg-notion-hover hover:text-notion-text'}`;
+            btn.innerHTML = `<span class="truncate">${opt.text}</span>` + (isSelected ? '<i data-lucide="check" class="w-4 h-4 shrink-0 ml-2"></i>' : '');
+            btn.addEventListener('click', (e) => {
+              e.stopPropagation();
+              selectEl.value = opt.value;
+              labelSpan.textContent = opt.text;
+              menu.classList.add('hidden');
+              icon.classList.remove('rotate-180');
+              renderOptions(searchInput ? searchInput.value : '');
+            });
+            listBox.appendChild(btn);
+          });
+          lucide.createIcons();
+        }
+
+        labelSpan.textContent = selectEl.options[selectEl.selectedIndex]?.text || 'Pilih...';
+        renderOptions();
+
+        trigger.addEventListener('click', (e) => {
+          e.stopPropagation();
+          menu.classList.toggle('hidden');
+          icon.classList.toggle('rotate-180', !menu.classList.contains('hidden'));
+        });
+
+        wrapper.append(trigger, menu);
+      });
+    }
+
+    function initModernFileUploads() {
+      document.querySelectorAll('input[type="file"].modern-file').forEach((fileEl) => {
+        if (fileEl.dataset.upgraded) return;
+        fileEl.dataset.upgraded = '1';
+        fileEl.classList.add('hidden');
+        const placeholder = fileEl.dataset.placeholder || 'Pilih atau seret file ke sini...';
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'w-full flex items-center justify-between gap-3 px-3.5 py-2.5 bg-notion-sidebar/60 border border-dashed border-notion-border rounded-lg text-sm hover:bg-notion-hover/60 transition-all text-left';
+        const update = () => {
+          const file = fileEl.files?.[0];
+          btn.innerHTML = file
+            ? `<span class="flex items-center gap-2 min-w-0"><i data-lucide="file-check-2" class="w-4 h-4 text-emerald-600 shrink-0"></i><span class="truncate font-medium">${file.name}</span></span><span class="text-xs text-notion-blue font-medium shrink-0">Ganti</span>`
+            : `<span class="flex items-center gap-2 min-w-0"><i data-lucide="upload-cloud" class="w-4 h-4 text-notion-gray shrink-0"></i><span class="truncate text-notion-gray">${placeholder}</span></span><span class="px-2.5 py-1 bg-white border border-notion-border rounded text-xs font-medium shrink-0">Pilih File</span>`;
+          lucide.createIcons();
+        };
+        btn.addEventListener('click', () => fileEl.click());
+        fileEl.addEventListener('change', update);
+        fileEl.parentNode.insertBefore(btn, fileEl.nextSibling);
+        update();
+      });
+    }
+
+    function copyAgentPrompt() {
+      const text = document.getElementById('agent-prompt-text')?.textContent || '';
+      navigator.clipboard?.writeText(text).then(() => showToast('Prompt berhasil disalin!', 'success'));
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      initModernSelects();
+      initModernFileUploads();
+      lucide.createIcons();
+    });
+  </script>
+</body>
+</html>
